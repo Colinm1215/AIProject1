@@ -69,8 +69,8 @@ Simplified road map of Romania
 #Checks if entered cities are contained in the Romania map.
 #Checks if entered cities are the same.
 def checkCities(cOne, cTwo, rmap):
-    cities = list(map(lambda x:x.lower(), rmap.nodes()))
-    if cOne.lower() == cTwo.lower() or cOne.lower() not in cities or cTwo.lower() not in cities:
+    cities = list(map(lambda x:x, rmap.nodes()))
+    if cOne == cTwo or cOne not in cities or cTwo not in cities:
         return True
     else:
         return False
@@ -110,8 +110,20 @@ def readMap(filename):
     f.close()
     return finished_map
 
-def main():
 
+def do_astar(cityOne, cityTwo, map):
+    gp_astar = SPSA.GraphProblem(cityOne, cityTwo, map)
+    search_result = SPSA.astar_search(gp_astar)
+    path = search_result.path()
+    print("Using the A Star Search Method")
+    print("The total cost of the path was " + str(path[-1].path_cost))
+    print("The path was " + path[0].state, end=" ")
+    for i in range(1, len(path)):
+        print("to " + path[i].state, end=" ")
+    print("\n")
+
+
+def main():
     #Load the map file
     file = input('Please enter the location of your map file: ')
     file_exists = os.path.exists(file)
@@ -144,6 +156,8 @@ def main():
                 return
 
     ##############################################################################################
+
+        do_astar(cityOne,cityTwo,romania_map)
 
 
     #Where the code to execute the algorithms should go....
