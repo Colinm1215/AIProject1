@@ -155,17 +155,8 @@ def main():
             if cityTwo.lower() == 'exit':
                 return
 
-    ##############################################################################################
-
+        #Run A* Search
         do_astar(cityOne,cityTwo,romania_map)
-
-
-    #Where the code to execute the algorithms should go....
-
-
-
-
-    ##############################################################################################
 
         #Once search is completed
         #Allow user the option to search for a path between a new pair or cities or exit
