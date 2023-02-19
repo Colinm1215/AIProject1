@@ -4,6 +4,7 @@ from collections import deque
 from utils import *
 import SimpleProblemSolvingAgent as SPSA
 
+#Graph Class supplied from search.py
 class Graph:
     """A graph connects nodes (vertices) by edges (links). Each edge can also
     have a length associated with it. The constructor call is something like:
@@ -58,13 +59,10 @@ class Graph:
         nodes = s1.union(s2)
         return list(nodes)
 
+#UndirectedGraph function supplied from search.py
 def UndirectedGraph(graph_dict=None):
     """Build a Graph where every edge (including future ones) goes both ways."""
     return Graph(graph_dict=graph_dict, directed=False)
-
-""" [Figure 3.2]
-Simplified road map of Romania
-"""
 
 #Checks if entered cities are contained in the Romania map.
 #Checks if entered cities are the same.
@@ -75,7 +73,7 @@ def checkCities(cOne, cTwo, rmap):
     else:
         return False
 
-#Helper function used to test user input
+#Helper function used to test user input.
 def inputTest(test):
     while test.lower() != 'yes' and test.lower() != 'no':
         test = input('Please enter yes/no (or exit to quit): ')
@@ -84,7 +82,7 @@ def inputTest(test):
             return
     return test
 
-#Helper function used to read in the map file
+#Helper function used to read in the map file.
 def readMap(filename):
     map = {}
     mapDone = False;
@@ -111,19 +109,20 @@ def readMap(filename):
     return finished_map
 
 
-#Helper function used to call A Star search method
-#Takes in a Graph Problem and solves with astar
+#Helper function used to call A Star search method.
+#Takes in a Graph Problem and solves with astar using problem.h and path cost as the heuristic.
 def do_astar(problem):
     search_result = SPSA.astar_search(problem)
     path = search_result.path()
     print("Using the A Star Search Method")
     print("The total cost of the path was " + str(path[-1].path_cost))
+    print("The path was " + path[0].state, end=" ")
     for i in range(1, len(path)):
         print("to " + path[i].state, end=" ")
     print("\n")
 
-#Helper function used to call Greedy Best First Search
-#Takes in a Graph Problem and solves with Best First Search using problem.h as the heuristic
+#Helper function used to call Greedy Best First Search.
+#Takes in a Graph Problem and solves with Best First Search using problem.h as the heuristic.
 def do_gbfs(problem):
     search_result = SPSA.best_first_graph_search(problem, problem.h)
     path = search_result.path()
@@ -136,7 +135,7 @@ def do_gbfs(problem):
 
 
 def main():
-    #Load the map file
+    #Load the map file.
     file = input('Please enter the location of your map file: ')
     file_exists = os.path.exists(file)
     while file_exists != True:
@@ -146,17 +145,17 @@ def main():
             return
     romania_map = readMap(file)
 
-    #Loop to run the code until the user would like to exit the program
+    #Loop to run the code until the user would like to exit the program.
     run_again = True
     print("Hello, where will you be traveling in Romania?")
     while(run_again):
 
-        #Ask user for cities they would like to find a path between
+        #Ask user for cities they would like to find a path between.
         cityOne = input("Enter the first city: ")
         cityTwo = input("Enter the second city: ")
 
-        #Check to see if cities are valid
-        #If not, prompt user to re-enter cities or allow them to exit
+        #Check to see if cities are valid.
+        #If not, prompt user to re-enter cities or allow them to exit.
         while checkCities(cityOne,cityTwo, romania_map):
             print()
             print("Please enter valid (and different) cities...")
@@ -167,15 +166,15 @@ def main():
             if cityTwo.lower() == 'exit':
                 return
 
-        #Create Graph Problem instance
+        #Create Graph Problem instance.
         gp = SPSA.GraphProblem(cityOne, cityTwo, romania_map)
-        #Run GBFS Search
+        #Run GBFS Search.
         do_gbfs(gp)
-        #Run A* Search
+        #Run A* Search.
         do_astar(gp)
 
-        #Once search is completed
-        #Allow user the option to search for a path between a new pair or cities or exit
+        #Once search is completed...
+        #Allow user the option to search for a path between a new pair or cities or exit.
         again = input('\n' + 'Would you like to check another pair of cities? ')
         again = inputTest(again)
         if again is None:
@@ -183,7 +182,7 @@ def main():
         if again.lower() == 'yes':
             print()
         else:
-            print("Thank You for Using Our App")
+            print("Thank You for Using Our App.")
             run_again = False
 
 if __name__ == "__main__":
