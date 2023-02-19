@@ -110,12 +110,24 @@ def readMap(filename):
     f.close()
     return finished_map
 
-
-def do_astar(cityOne, cityTwo, map):
-    gp_astar = SPSA.GraphProblem(cityOne, cityTwo, map)
-    search_result = SPSA.astar_search(gp_astar)
+#Helper function used to call A Star search method
+#Takes in a Graph Problem and solves with astar
+def do_astar(problem):
+    search_result = SPSA.astar_search(problem)
     path = search_result.path()
     print("Using the A Star Search Method")
+    print("The total cost of the path was " + str(path[-1].path_cost))
+    print("The path was " + path[0].state, end=" ")
+    for i in range(1, len(path)):
+        print("to " + path[i].state, end=" ")
+    print("\n")
+
+#Helper function used to call Greedy Best First Search
+#Takes in a Graph Problem and solves with Best First Search using problem.h as the heuristic
+def do_gbfs(problem):
+    search_result = SPSA.best_first_graph_search(problem)
+    path = search_result.path()
+    print("Using the Greedy Best First Search Method")
     print("The total cost of the path was " + str(path[-1].path_cost))
     print("The path was " + path[0].state, end=" ")
     for i in range(1, len(path)):
@@ -155,17 +167,15 @@ def main():
             if cityTwo.lower() == 'exit':
                 return
 
-    ##############################################################################################
+##################################################################################################
+        #Where the code to execute the algorithms should go....
 
-        do_astar(cityOne,cityTwo,romania_map)
+        gp = SPSA.GraphProblem(cityOne, cityTwo, map)
+        print("\n")
+        do_gbfs(gp)
+        do_astar(gp)
 
-
-    #Where the code to execute the algorithms should go....
-
-
-
-
-    ##############################################################################################
+##################################################################################################
 
         #Once search is completed
         #Allow user the option to search for a path between a new pair or cities or exit

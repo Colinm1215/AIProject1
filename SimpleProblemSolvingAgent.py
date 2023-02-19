@@ -170,7 +170,7 @@ class SimpleProblemSolvingAgentProgram:
         raise NotImplementedError
 # ______________________________________________________________________________
 
-def best_first_graph_search(problem, f, display=False):
+def best_first_graph_search(problem, f=None, display=False):
     """Search the nodes with the lowest f scores first.
     You specify the function f(node) that you want to minimize; for example,
     if f is a heuristic estimate to the goal, then we have greedy best
@@ -178,7 +178,7 @@ def best_first_graph_search(problem, f, display=False):
     There is a subtlety: the line "f = memoize(f, 'f')" means that the f
     values will be cached on the nodes as they are computed. So after doing
     a best first search you can examine the f values of the path returned."""
-    f = memoize(f, 'f')
+    f = memoize(f or problem.h, 'f')
     node = Node(problem.initial)
     frontier = PriorityQueue('min', f)
     frontier.append(node)
@@ -194,7 +194,7 @@ def best_first_graph_search(problem, f, display=False):
             if child.state not in explored and child not in frontier:
                 frontier.append(child)
             elif child in frontier:
-                if f(child) < frontier[child]:
+                if (f(child) or problem.f(child)) < frontier[child]:
                     del frontier[child]
                     frontier.append(child)
     return None
